@@ -8,7 +8,8 @@ public class ConfigReader {
 
     private static final String CONFIG_FILE = "config.properties";
     private static final String USER_FILE_KEY = "users_file";
-    private static final String DEALER_FILE_KEY = "users_file";
+    private static final String DEALER_FILE_KEY = "dealers_file";
+    private static final String DELIVERIES_FILE_KEY = "deliveries_file";
 
     public static Config read() throws IOException {
         InputStream is = App.class.getClassLoader().getResourceAsStream(CONFIG_FILE);
@@ -18,10 +19,12 @@ public class ConfigReader {
         String line;
         while ((line = reader.readLine()) != null) {
             String[] comps = line.split("=");
-            if (comps[0] == USER_FILE_KEY) {
+            if (comps[0].equals(USER_FILE_KEY)) {
                 config.userFile = comps[1];
-            } else if (comps[0] == DEALER_FILE_KEY) {
+            } else if (comps[0].equals(DEALER_FILE_KEY)) {
                 config.dealerFile = comps[1];
+            } else if (comps[0].equals(DELIVERIES_FILE_KEY)) {
+                config.deliveryFile = comps[1];
             }
         }
         return config;
