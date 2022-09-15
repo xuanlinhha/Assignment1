@@ -39,7 +39,7 @@ public class App
 
         PState state = new InitialState(sd);
         while (true) {
-            state = state.move();
+            state = state.run();
         }
     }
 }

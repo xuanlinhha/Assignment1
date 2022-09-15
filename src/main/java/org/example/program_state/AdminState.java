@@ -1,10 +1,13 @@
 package org.example.program_state;
 
+import org.example.storage.Messages;
+
 import java.util.Scanner;
 
 public class AdminState implements PState {
-    private static final String MSG = "Admin module not available";
-    private static final String OPTION_1 = "0-Logout";
+    private static final String STATE_TITLE = "----ADMIN----";
+    private static final String MSG = "This module is not available!";
+    private static final String OPTION_0 = "0-Logout";
     private ServiceDiscovery sd;
     public AdminState() {}
     public AdminState(ServiceDiscovery sd) {
@@ -12,18 +15,25 @@ public class AdminState implements PState {
     }
 
     @Override
-    public PState move() {
-        System.out.println(MSG);
-        System.out.println(SEPARATING_LINE);
-        System.out.println(OPTION_1);
-        System.out.println(SELECT_ONE);
+    public PState run() {
         Scanner myObj = new Scanner(System.in);
-        String selection = myObj.nextLine();
-        PState nextState = this;
-        if (selection.equals("0")) {
-            nextState = new InitialState(sd);
+        while (true) {
+            System.out.println(STATE_TITLE);
+            System.out.println(OPTION_0);
+            System.out.println(SELECT_ONE_OPTION);
+            String selection = myObj.nextLine();
+            PState nextState = null;
+            switch (selection) {
+                case "0": {
+                    nextState = new InitialState(sd);
+                    break;
+                }
+                default: {
+                    System.out.println(Messages.NOT_AVAILABLE_OPTION);
+                }
+            }
+            if (nextState != null) return nextState;
         }
-        return nextState;
     }
 
     public ServiceDiscovery getSd() {

@@ -12,17 +12,8 @@ public class R002State implements PState {
         this.sd = sd;
     }
     @Override
-    public PState move() {
-        System.out.println(MSG);
-        System.out.println(SEPARATING_LINE);
-        System.out.println(OPTION_1);
-        System.out.println(SELECT_ONE);
-        Scanner myObj = new Scanner(System.in);
-        String selection = myObj.nextLine();
-        PState nextState = this;
-        if (selection.equals("0")) {
-            nextState = new InitialState(sd);
-        }
-        return nextState;
+    public PState run() {
+        // TODO: implement this
+        return null;
     }
 }

@@ -1,13 +1,13 @@
 package org.example.program_state;
 
-import org.example.model.Role;
 import org.example.model.User;
-import org.example.service.UserService;
+import org.example.storage.Messages;
 
 import java.util.Scanner;
 
 public class InitialState implements PState {
-    private static final String MSG = "Please login with username/password:";
+    private static final String STATE_TITLE = "----LOGIN----";
+    private static final String COMMAND = "Please login with username/password:";
     private static final String SEPARATOR = "/";
     private ServiceDiscovery sd;
 
@@ -18,43 +18,45 @@ public class InitialState implements PState {
     }
 
     @Override
-    public PState move() {
+    public PState run() {
         return login();
     }
 
     private PState login() {
         Scanner myObj = new Scanner(System.in);
-        System.out.println(MSG);
-        String credential = myObj.nextLine();
-        String[] tmp = credential.split(SEPARATOR);
-        boolean move = false;
-        PState nextState = null;
-        if (tmp.length == 2) {
-            User user = this.sd.getUserService().check(tmp[0], tmp[1]);
-            if (user != null) {
-                // log in success
-                move = true;
-                switch (user.getRole()) {
-                    case R001: {
-                        move = true;
-                        nextState = new R001State(sd);
-                        break;
+        while (true) {
+            System.out.println(STATE_TITLE);
+            System.out.println(COMMAND);
+            String credential = myObj.nextLine();
+            String[] tmp = credential.split(SEPARATOR);
+            if (tmp.length == 2) {
+                PState nextState = null;
+                // check username/password
+                User user = this.sd.getUserService().check(tmp[0], tmp[1]);
+                if (user != null) {
+                    // log in success
+                    switch (user.getRole()) {
+                        case R001: {
+                            nextState = new R001State(sd);
+                            break;
+                        }
+                        case R002: {
+                            nextState = new R002State(sd);
+                            break;
+                        }
+                        case ADMIN: {
+                            nextState = new AdminState(sd);
+                            break;
+                        }
                     }
-                    case R002: {
-                        move = true;
-                        nextState = new R002State(sd);
-                        break;
-                    }
-                    case ADMIN: {
-                        move = true;
-                        nextState = new AdminState(sd);
-                        break;
-                    }
+                } else {
+                    System.out.println(Messages.INCORRECT_USERNAME_PASSWORD);
                 }
+                if (nextState != null) return nextState;
+            } else {
+                System.out.println(Messages.INVALID_USERNAME_PASSWORD);
             }
         }
-        if (!move) return this;
-        else return nextState;
     }
 
     public ServiceDiscovery getSd() {
