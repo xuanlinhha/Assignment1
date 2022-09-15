@@ -8,10 +8,8 @@ public class AdminState implements PState {
     private static final String STATE_TITLE = "----ADMIN----";
     private static final String MSG = "This module is not available!";
     private static final String OPTION_0 = "0-Logout";
-    private ServiceDiscovery sd;
-    public AdminState() {}
-    public AdminState(ServiceDiscovery sd) {
-        this.sd = sd;
+
+    public AdminState() {
     }
 
     @Override
@@ -25,7 +23,7 @@ public class AdminState implements PState {
             PState nextState = null;
             switch (selection) {
                 case "0": {
-                    nextState = new InitialState(sd);
+                    nextState = new InitialState();
                     break;
                 }
                 default: {
@@ -34,13 +32,5 @@ public class AdminState implements PState {
             }
             if (nextState != null) return nextState;
         }
-    }
-
-    public ServiceDiscovery getSd() {
-        return sd;
-    }
-
-    public void setSd(ServiceDiscovery sd) {
-        this.sd = sd;
     }
 }

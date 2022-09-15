@@ -1,6 +1,8 @@
 package org.example.program_state;
 
 import org.example.model.User;
+import org.example.service.ServiceDiscovery;
+import org.example.service.UserService;
 import org.example.storage.Messages;
 
 import java.util.Scanner;
@@ -9,12 +11,9 @@ public class InitialState implements PState {
     private static final String STATE_TITLE = "----LOGIN----";
     private static final String COMMAND = "Please login with username/password:";
     private static final String SEPARATOR = "/";
-    private ServiceDiscovery sd;
+    private UserService userService;
 
-    public InitialState() {}
-
-    public InitialState(ServiceDiscovery sd) {
-        this.sd = sd;
+    public InitialState() {
     }
 
     @Override
@@ -32,20 +31,20 @@ public class InitialState implements PState {
             if (tmp.length == 2) {
                 PState nextState = null;
                 // check username/password
-                User user = this.sd.getUserService().check(tmp[0], tmp[1]);
+                User user = ServiceDiscovery.userService.check(tmp[0], tmp[1]);
                 if (user != null) {
                     // log in success
                     switch (user.getRole()) {
                         case R001: {
-                            nextState = new R001State(sd);
+                            nextState = new R001State();
                             break;
                         }
                         case R002: {
-                            nextState = new R002State(sd);
+                            nextState = new R002State();
                             break;
                         }
                         case ADMIN: {
-                            nextState = new AdminState(sd);
+                            nextState = new AdminState();
                             break;
                         }
                     }
@@ -57,13 +56,5 @@ public class InitialState implements PState {
                 System.out.println(Messages.INVALID_USERNAME_PASSWORD);
             }
         }
-    }
-
-    public ServiceDiscovery getSd() {
-        return sd;
-    }
-
-    public void setSd(ServiceDiscovery sd) {
-        this.sd = sd;
     }
 }

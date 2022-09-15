@@ -1,6 +1,6 @@
 package org.example.program_state;
 
-import java.util.Scanner;
+import org.example.service.ServiceDiscovery;
 
 public class R002State implements PState {
     private static final String MSG = "Delivery module not available";

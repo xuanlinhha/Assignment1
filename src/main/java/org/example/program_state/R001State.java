@@ -1,5 +1,6 @@
 package org.example.program_state;
 
+import org.example.service.ServiceDiscovery;
 import org.example.storage.Messages;
 
 import java.util.Scanner;
@@ -11,12 +12,10 @@ public class R001State implements PState {
     private static final String OPTION_2 = "2-Add/Update a dealer";
     private static final String OPTION_3 = "3-Remove a dealer by ID";
     private static final String OPTION_5 = "4-Search dealers by name";
-    private ServiceDiscovery sd;
-    public R001State() {}
 
-    public R001State(ServiceDiscovery sd) {
-        this.sd = sd;
+    public R001State() {
     }
+
     @Override
     public PState run() {
         Scanner myObj = new Scanner(System.in);
@@ -30,11 +29,11 @@ public class R001State implements PState {
             PState nextState = null;
             switch (selection) {
                 case "0": {
-                    nextState = new InitialState(sd);
+                    nextState = new InitialState();
                     break;
                 }
                 case "1": {
-                    sd.getDealerService().printAll();
+                    ServiceDiscovery.dealerService.printAll();
                     break;
                 }
                 // TODO: handle other options
